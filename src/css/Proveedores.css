@@ -1,0 +1,198 @@
+/* src/css/Proveedores.css */
+/* Estilos para la sección de proveedores EN BOTONES*/
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.verde {
+  background: #16a34a;
+}
+
+.azul {
+  background: #2563eb;
+}
+
+.rojo {
+  background: #dc2626;
+}
+
+.naranja {
+  background: #ea580c;
+}
+
+.verde:hover {
+  background: #15803d;
+}
+
+.azul:hover {
+  background: #1d4ed8;
+}
+
+.rojo:hover {
+  background: #b91c1c;
+}
+
+.naranja:hover {
+  background: #c2410c;
+}
+/* Estilos para la sección de proveedores EN TABLAS*/
+.proveedores-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.proveedores-card,
+.proveedores-lista {
+  padding: 20px;
+}
+
+.proveedores-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.proveedores-header h2,
+.proveedores-lista h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.proveedores-header p {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.proveedores-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.proveedores-form label {
+  font-weight: 700;
+}
+
+.proveedores-form input,
+.proveedores-form textarea,
+.buscador-proveedor {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+}
+
+.proveedores-form textarea {
+  min-height: 90px;
+  resize: vertical;
+  grid-column: span 2;
+}
+
+.proveedores-form button {
+  grid-column: span 2;
+}
+
+.proveedores-lista {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.buscador-proveedor {
+  margin: 16px 0;
+}
+
+.proveedores-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.proveedor-item {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--bg);
+}
+
+.proveedor-item:hover {
+  filter: brightness(0.96);
+}
+
+.proveedor-item strong,
+.proveedor-item span,
+.proveedor-item small {
+  display: block;
+}
+
+.proveedor-item span {
+  margin-top: 4px;
+}
+
+.proveedor-item small {
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+.proveedor-vacio {
+  border: 1px dashed var(--border);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: #6b7280;
+}
+
+
+.proveedor-mapa {
+  grid-column: span 2;
+  margin-top: 16px;
+}
+
+.proveedor-mapa iframe {
+  border: 0;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.proveedor-mapa a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .proveedor-mapa {
+    grid-column: span 1;
+  }
+}
+
+
+@media (max-width: 1000px) {
+  .proveedores-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .proveedores-form {
+    grid-template-columns: 1fr;
+  }
+
+  .proveedores-form textarea,
+  .proveedores-form button {
+    grid-column: span 1;
+  }
+}
