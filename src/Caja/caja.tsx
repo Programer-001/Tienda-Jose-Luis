@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { get, ref, update } from "firebase/database";
 import { db } from "../firebase/configuracion";
-import "../css/Caja.css";
+import "../css/caja.css";
 
 type Producto = {
   id: string;
