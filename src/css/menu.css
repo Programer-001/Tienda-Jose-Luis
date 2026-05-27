@@ -1,0 +1,119 @@
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+
+  padding: 20px 14px;
+  flex-shrink: 0;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.logo-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+
+  background: var(--sidebar-logo-bg);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 800;
+}
+
+.sidebar-logo h1 {
+  font-size: 16px;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-item {
+  width: 100%;
+  border: none;
+
+  background: transparent;
+  color: var(--sidebar-text);
+
+  padding: 12px;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 15px;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background: var(--sidebar-hover);
+}
+
+.sidebar-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* =========================
+   IPAD / TABLET
+========================= */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 82px;
+    padding: 18px 10px;
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .sidebar-logo h1 {
+    display: none;
+  }
+
+  .logo-circle {
+    width: 46px;
+    height: 46px;
+  }
+
+  .sidebar-item {
+    justify-content: center;
+    padding: 14px 0;
+  }
+
+  .sidebar-item span {
+    display: none;
+  }
+
+  .sidebar-icon {
+    width: 28px;
+    height: 28px;
+  }
+}

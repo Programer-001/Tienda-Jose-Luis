@@ -3,10 +3,14 @@
 ========================= */
 
 :root {
-  --bg: #f5f5f5;
+  --bg: #eef2ff;
+
   --text: #111827;
+
   --card: #ffffff;
-  --border: #d1d5db;
+
+  --border: #e2e8f0;
+
   --hover: #f3f4f6;
 
   --primary: #2563eb;
@@ -17,6 +21,22 @@
   --warning: #f59e0b;
 
   --shadow: rgba(0, 0, 0, 0.08);
+
+  /* =========================
+     SIDEBAR LIGHT
+  ========================= */
+
+  --sidebar-bg: linear-gradient(
+    180deg,
+    #dee3ee 0%,
+    #4d66bb 100%
+  );
+
+  --sidebar-text: #000000;
+
+  --sidebar-hover: #2563eb;
+
+  --sidebar-logo-bg: #1d4ed8;
 }
 
 /* =========================
@@ -25,9 +45,13 @@
 
 .dark {
   --bg: #111827;
+
   --text: #f3f4f6;
+
   --card: #1f2937;
+
   --border: #374151;
+
   --hover: #2b3545;
 
   --primary: #3b82f6;
@@ -38,6 +62,22 @@
   --warning: #fbbf24;
 
   --shadow: rgba(0, 0, 0, 0.35);
+
+  /* =========================
+     SIDEBAR DARK
+  ========================= */
+
+  --sidebar-bg: linear-gradient(
+    180deg,
+    #020617 0%,
+    #0f172a 100%
+  );
+
+  --sidebar-text: #ffffff;
+
+  --sidebar-hover: #2563eb;
+
+  --sidebar-logo-bg: #2563eb;
 }
 
 /* =========================
@@ -74,9 +114,12 @@ body {
 ========================= */
 
 .app {
+  display: flex;
   min-height: 100vh;
+
   background: var(--bg);
   color: var(--text);
+
   transition:
     background 0.25s ease,
     color 0.25s ease;
@@ -270,7 +313,15 @@ td {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--hover);
 }
+/* =========================
+   MAIN CONTENT
+========================= */
 
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow: auto;
+}
 /* =========================
    RESPONSIVE
 ========================= */

@@ -1,31 +1,59 @@
 // src/App.tsx
-// src/App.tsx
+
 import { useState } from "react";
+
 import Caja from "./Caja/caja";
-//import { useState } from "react";
-//import Almacen from "./Almacen/almacen";
-//import Proveedores from "./Proveedores/Proveedores";
+import Proveedores from "./Proveedores/Proveedores";
+import Almacen from "./Almacen/almacen";
+
+import Menu from "./navbar/menu";
 
 function App() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] =
+    useState<"light" | "dark">("light");
+
+  const [pagina, setPagina] =
+    useState("caja");
 
   return (
     <div className={`app ${theme}`}>
-      <div className="page">
+
+      {/* SIDEBAR */}
+      <Menu
+        pagina={pagina}
+        setPagina={setPagina}
+      />
+
+      {/* CONTENIDO */}
+      <main className="main-content">
 
         <button
           className="theme-btn"
           onClick={() =>
-            setTheme(theme === "light" ? "dark" : "light")
+            setTheme(
+              theme === "light"
+                ? "dark"
+                : "light"
+            )
           }
         >
-          {theme === "light" ? "🌙 Oscuro" : "☀ Claro"}
+          {theme === "light"
+            ? "🌙 Oscuro"
+            : "☀ Claro"}
         </button>
 
         <h1>Tienda Jose Luis</h1>
 
-        <Caja />
-      </div>
+        {/* PAGINAS */}
+        {pagina === "caja" && <Caja />}
+
+        {pagina === "proveedores" && (
+          <Proveedores />
+        )}
+        {pagina === "almacen" && <Almacen />}
+
+
+      </main>
     </div>
   );
 }

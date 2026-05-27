@@ -234,3 +234,81 @@
         width: 100%;
     }
 }
+
+/* =========================
+   RESPONSIVE iPAD / TABLET
+   ========================= */
+@media (min-width: 768px) and (max-width: 1180px) {
+  .almacen-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .almacen-card,
+  .movimientos-card {
+    padding: 18px;
+  }
+
+  .almacen-header {
+    gap: 16px;
+  }
+
+  .almacen-header h2,
+  .movimientos-card h2 {
+    font-size: 28px;
+  }
+
+  .almacen-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+
+  .buscador-almacen input {
+    max-width: 100%;
+  }
+
+  .tabla-scroll {
+    max-height: 460px;
+  }
+
+  .almacen-table th,
+  .almacen-table td {
+    padding: 13px;
+    font-size: 14px;
+  }
+
+  .movimientos-header {
+    gap: 14px;
+  }
+
+  .placeholder {
+    min-height: 200px;
+  }
+}
+
+/* iPad vertical / pantalla angosta */
+@media (max-width: 820px) {
+  .almacen-header,
+  .movimientos-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .almacen-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .tabla-scroll {
+    max-height: 420px;
+  }
+}

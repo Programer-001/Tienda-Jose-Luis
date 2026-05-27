@@ -196,3 +196,76 @@
     grid-column: span 1;
   }
 }
+
+/* =========================
+   RESPONSIVE iPAD / TABLET
+   ========================= */
+@media (min-width: 768px) and (max-width: 1180px) {
+  .proveedores-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .proveedores-card,
+  .proveedores-lista {
+    padding: 18px;
+  }
+
+  .proveedores-header {
+    gap: 16px;
+  }
+
+  .proveedores-header h2,
+  .proveedores-lista h2 {
+    font-size: 28px;
+  }
+
+  .proveedores-form {
+    gap: 12px;
+  }
+
+  .proveedores-form input,
+  .proveedores-form textarea,
+  .buscador-proveedor {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .proveedor-item {
+    padding: 13px;
+  }
+
+  .proveedores-lista {
+    max-height: none;
+  }
+
+  .proveedor-mapa iframe {
+    height: 260px;
+  }
+}
+
+/* iPad vertical / pantallas más angostas */
+@media (max-width: 820px) {
+  .proveedores-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .proveedores-form {
+    grid-template-columns: 1fr;
+  }
+
+  .proveedores-form textarea,
+  .proveedores-form button,
+  .proveedor-mapa {
+    grid-column: span 1;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .proveedor-mapa iframe {
+    height: 220px;
+  }
+}
