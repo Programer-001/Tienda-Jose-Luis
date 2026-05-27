@@ -1,0 +1,283 @@
+.caja-page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  padding: 24px;
+}
+
+.caja-shell {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+}
+
+.caja-main,
+.ticket-panel,
+.scanner-card,
+.producto-card,
+.modal-pago {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.caja-main {
+  border-radius: 22px;
+  padding: 24px;
+}
+
+.caja-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.caja-header p {
+  margin: 6px 0 0;
+  opacity: 0.75;
+}
+
+.scanner-card {
+  margin-top: 24px;
+  border-radius: 18px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.scanner-card label {
+  grid-column: 1 / -1;
+  font-weight: 700;
+}
+
+.scanner-card input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 13px 15px;
+  font-size: 16px;
+}
+
+.scanner-card button,
+.btn-pagar,
+.btn-finalizar {
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.productos-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+.producto-card {
+  text-align: left;
+  border-radius: 18px;
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.producto-card:hover {
+  transform: translateY(-2px);
+  border-color: #ef4444;
+}
+
+.producto-card strong,
+.producto-card span,
+.producto-card b,
+.producto-card small {
+  display: block;
+}
+
+.producto-card span,
+.producto-card small {
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+.producto-card b {
+  margin-top: 12px;
+  color: #ef4444;
+}
+
+.ticket-panel {
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 48px);
+}
+
+.ticket-header,
+.ticket-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ticket-header h2 {
+  margin: 0;
+}
+
+.btn-limpiar,
+.btn-cancelar {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.ticket-list {
+  flex: 1;
+  margin-top: 20px;
+  overflow-y: auto;
+}
+
+.ticket-empty {
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.ticket-info strong,
+.ticket-info small {
+  display: block;
+}
+
+.ticket-info small {
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+.ticket-actions {
+  text-align: right;
+}
+
+.ticket-actions span {
+  display: block;
+  font-weight: 800;
+  color: #ef4444;
+}
+
+.cantidad-btns {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.cantidad-btns button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.ticket-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+}
+
+.ticket-total {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.ticket-total strong {
+  color: #ef4444;
+}
+
+.btn-pagar {
+  width: 100%;
+  font-size: 17px;
+}
+
+.btn-pagar:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 18px;
+}
+
+.modal-pago {
+  width: min(850px, 100%);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.pago-linea {
+  display: grid;
+  grid-template-columns: 1.3fr auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.pago-linea strong {
+  font-size: 22px;
+}
+
+.pago-linea select {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 11px 12px;
+}
+
+.btn-cancelar {
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .caja-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-panel {
+    min-height: auto;
+  }
+
+  .pago-linea {
+    grid-template-columns: 1fr;
+  }
+
+  .scanner-card {
+    grid-template-columns: 1fr;
+  }
+}

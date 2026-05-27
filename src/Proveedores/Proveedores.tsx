@@ -56,6 +56,12 @@ export default function Proveedores() {
     setProveedores(lista);
   };
 
+  // nombre de la página
+  useEffect(() => {
+  document.title = "Proveedores";
+    }, []);
+
+
   useEffect(() => {
     cargarProveedores();
   }, []);

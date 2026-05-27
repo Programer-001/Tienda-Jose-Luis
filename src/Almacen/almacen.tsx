@@ -13,8 +13,10 @@ interface Proveedor {
 
 interface ProductoAlmacen {
   id: string;
+  codigoBarras?: string;
   nombre: string;
   precio: number;
+  precioProveedor?: number;
   cantidad: number;
   proveedorId?: string;
   proveedorNombre?: string;
@@ -27,8 +29,10 @@ type ModoPanel = "ninguno" | "agregar" | "ingresar" | "detalle" | "editar";
 
 const productoVacio: ProductoAlmacen = {
   id: "",
+  codigoBarras: "",
   nombre: "",
   precio: 0,
+  precioProveedor: 0,
   cantidad: 0,
   proveedorId: "",
   proveedorNombre: "",
@@ -50,6 +54,13 @@ export default function Almacen() {
   const [productoStockId, setProductoStockId] = useState("");
   const [cantidadIngreso, setCantidadIngreso] = useState("");
 
+  const [busqueda, setBusqueda] = useState("");
+
+// nombre de la página
+  useEffect(() => {
+  document.title = "Almacén";
+    }, []);
+
   useEffect(() => {
     const productosRef = ref(db, "almacen/productos");
 
@@ -59,12 +70,14 @@ export default function Almacen() {
       const lista: ProductoAlmacen[] = Object.entries(data).map(
         ([key, value]: [string, any]) => ({
           id: value.id || key,
+          codigoBarras: value.codigoBarras || value.id || key,
           nombre: value.nombre || value.material || "",
           precio: Number(value.precio || 0),
           cantidad: Number(value.cantidad || 0),
           proveedorId: value.proveedorId || "",
           proveedorNombre: value.proveedorNombre || "",
           nombreProveedor: value.nombreProveedor || "",
+          precioProveedor: Number(value.precioProveedor || 0),
           activo: value.activo ?? true,
           fecha: value.fecha || "",
         })
@@ -96,9 +109,11 @@ export default function Almacen() {
     cargarProveedores();
   }, []);
 // Generar código de barras al seleccionar producto
-  useEffect(() => {
-  if (productoSeleccionado?.id) {
-    JsBarcode("#barcode-producto", productoSeleccionado.id, {
+useEffect(() => {
+  const codigo = productoSeleccionado?.codigoBarras || productoSeleccionado?.id;
+
+  if (codigo) {
+    JsBarcode("#barcode-producto", codigo, {
       format: "CODE128",
       width: 2,
       height: 50,
@@ -162,12 +177,15 @@ export default function Almacen() {
     setModoPanel("editar");
   };
 
-  const handleForm = (campo: keyof ProductoAlmacen, valor: string | number) => {
-    setForm((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
-  };
+const handleForm = (
+  campo: keyof ProductoAlmacen,
+  valor: string | number | boolean
+) => {
+  setForm((prev) => ({
+    ...prev,
+    [campo]: valor,
+  }));
+};
 
   const handleProveedor = (proveedorId: string) => {
     const proveedor = proveedores.find((p) => p.id === proveedorId);
@@ -191,12 +209,14 @@ export default function Almacen() {
 
     const datosProducto: ProductoAlmacen = {
       id: idProducto,
+      codigoBarras: (form.codigoBarras || idProducto).trim().toUpperCase(),
       nombre,
       precio: Number(form.precio || 0),
       cantidad: Number(form.cantidad || 0),
       proveedorId: form.proveedorId || "",
       proveedorNombre: form.proveedorNombre || "",
       nombreProveedor: (form.nombreProveedor || "").trim().toUpperCase(),
+      precioProveedor: Number(form.precioProveedor || 0),
       activo: true,
       fecha: fechaHoy(),
     };
@@ -265,18 +285,35 @@ export default function Almacen() {
     return "verde-indicador";
   };
 
+  // Filtrar productos según búsqueda
+  const productosFiltrados = useMemo(() => {
+  const texto = busqueda.trim().toUpperCase();
+
+  if (!texto) return productos;
+
+  return productos.filter((p) => {
+    return (
+      p.id.toUpperCase().includes(texto) ||
+      (p.codigoBarras || "").toUpperCase().includes(texto) ||
+      p.nombre.toUpperCase().includes(texto) ||
+      (p.proveedorNombre || "").toUpperCase().includes(texto) ||
+      (p.nombreProveedor || "").toUpperCase().includes(texto)
+    );
+  });
+}, [busqueda, productos]);
+
   return (
     <div className="almacen-layout">
       <section className="almacen-card card">
         <div className="almacen-header">
           <div>
-            <h2>Almacén inventario</h2>
+            <h2>Almacén</h2>
             <p>Total piezas: {totalPiezas}</p>
           </div>
 
           <div className="almacen-actions">
             <button className="btn verde" onClick={abrirAgregar}>
-              Agregar material
+              Agregar producto
             </button>
 
             <button className="btn azul" onClick={() => setModoPanel("ingresar")}>
@@ -284,7 +321,15 @@ export default function Almacen() {
             </button>
           </div>
         </div>
-
+        {/* Buscador de productos */}
+      <div className="buscador-almacen">
+      <input
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        placeholder="Buscar por nombre, ID o código de barras..."
+      />
+    </div>
+    {/* Tabla de productos */}
         <div className="tabla-scroll">
           <table className="almacen-table">
             <thead>
@@ -298,14 +343,14 @@ export default function Almacen() {
             </thead>
 
             <tbody>
-              {productos.length === 0 ? (
+              {productosFiltrados.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="vacio">
                     No hay productos registrados.
                   </td>
                 </tr>
               ) : (
-                productos.map((item) => (
+                productosFiltrados.map((item) => (
                   <tr
                     key={item.id}
                     className="fila-producto"
@@ -354,6 +399,8 @@ export default function Almacen() {
             <p><strong>Cantidad:</strong> {productoSeleccionado.cantidad}</p>
             <p><strong>Proveedor:</strong> {productoSeleccionado.proveedorNombre || "-"}</p>
             <p><strong>Nombre con proveedor:</strong> {productoSeleccionado.nombreProveedor || "-"}</p>
+            <p><strong>Precio proveedor:</strong>{" "}{formatearMoneda(productoSeleccionado.precioProveedor || 0)}</p>
+            <p><strong>Activo:</strong>{" "}{productoSeleccionado.activo ? "Sí" : "No"}</p>
 
             <div className="movimiento-barcode">
             <svg id="barcode-producto"></svg>
@@ -373,9 +420,16 @@ export default function Almacen() {
             <input
               value={form.nombre}
               onChange={(e) => handleForm("nombre", e.target.value)}
-              placeholder="Ej. CAPUCHON 3/8"
+              placeholder="Ej. REFRESCO COCA COLA 600ML"
             />
-
+            <label>Código de barras</label>
+            <input
+              value={form.codigoBarras || ""}
+              onChange={(e) =>
+                handleForm("codigoBarras", e.target.value.toUpperCase())
+              }
+              placeholder="Escanea o escribe el código"
+            />
             <label>Precio</label>
             <input
               value={precioTexto}
@@ -415,7 +469,24 @@ export default function Almacen() {
               onChange={(e) => handleForm("nombreProveedor", e.target.value)}
               placeholder="Nombre como lo maneja el proveedor"
             />
-
+          <label>Precio proveedor</label>
+          <input
+            type="number"
+            min="0"
+            value={form.precioProveedor || ""}
+            onChange={(e) =>
+              handleForm("precioProveedor", Number(e.target.value))
+            }
+            placeholder="0"
+          />
+          <label className="check-activo">
+            <input
+              type="checkbox"
+              checked={form.activo ?? true}
+              onChange={(e) => handleForm("activo", e.target.checked)}
+            />
+            Producto activo
+          </label>
             <button className="btn verde" onClick={guardarProducto}>
               Guardar producto
             </button>

@@ -1,48 +1,298 @@
+/* =========================
+   VARIABLES GLOBALES
+========================= */
+
 :root {
   --bg: #f5f5f5;
   --text: #111827;
   --card: #ffffff;
   --border: #d1d5db;
+  --hover: #f3f4f6;
+
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #f59e0b;
+
+  --shadow: rgba(0, 0, 0, 0.08);
 }
+
+/* =========================
+   DARK MODE
+========================= */
 
 .dark {
   --bg: #111827;
   --text: #f3f4f6;
   --card: #1f2937;
   --border: #374151;
+  --hover: #2b3545;
+
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #fbbf24;
+
+  --shadow: rgba(0, 0, 0, 0.35);
 }
+
+/* =========================
+   RESET
+========================= */
 
 * {
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
   margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+/* =========================
+   BODY
+========================= */
+
+body {
   font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
 }
+
+/* =========================
+   APP
+========================= */
 
 .app {
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
 }
 
 .page {
   padding: 24px;
 }
 
+/* =========================
+   TEXTOS
+========================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+p,
+span,
+label,
+small,
+strong {
+  color: var(--text);
+}
+
+/* =========================
+   CARDS
+========================= */
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
+  padding: 16px;
+
+  box-shadow: 0 2px 8px var(--shadow);
+
+  transition:
+    background 0.25s ease,
+    border 0.25s ease;
 }
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  outline: none;
+
+  transition:
+    background 0.25s ease,
+    border 0.25s ease,
+    color 0.25s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary);
+}
+
+/* =========================
+   BUTTONS
+========================= */
 
 button {
   cursor: pointer;
+  border: none;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease,
+    opacity 0.2s ease;
 }
+
+button:hover {
+  opacity: 0.95;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   BOTÓN TEMA
+========================= */
+
+.theme-btn {
+  padding: 10px 16px;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--card);
+  color: var(--text);
+
+  margin-bottom: 20px;
+}
+
+.theme-btn:hover {
+  background: var(--hover);
+}
+
+/* =========================
+   BOTONES BASE
+========================= */
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* =========================
+   TABLAS
+========================= */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  background: var(--card);
+  color: var(--text);
+}
+
+th {
+  background: var(--hover);
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: left;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hover);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 1024px) {
   .page {
     padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 9px 10px;
   }
 }

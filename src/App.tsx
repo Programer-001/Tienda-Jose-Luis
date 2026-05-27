@@ -1,13 +1,30 @@
 // src/App.tsx
-import Almacen from "./Almacen/almacen";
+// src/App.tsx
+import { useState } from "react";
+import Caja from "./Caja/caja";
+//import { useState } from "react";
+//import Almacen from "./Almacen/almacen";
 //import Proveedores from "./Proveedores/Proveedores";
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
   return (
-    <div className="app light">
+    <div className={`app ${theme}`}>
       <div className="page">
-        <h1>Sistema Tienda Jose Luis</h1>
-        <Almacen />
+
+        <button
+          className="theme-btn"
+          onClick={() =>
+            setTheme(theme === "light" ? "dark" : "light")
+          }
+        >
+          {theme === "light" ? "🌙 Oscuro" : "☀ Claro"}
+        </button>
+
+        <h1>Tienda Jose Luis</h1>
+
+        <Caja />
       </div>
     </div>
   );
