@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { get, ref, update } from "firebase/database";
+import { get, ref, update,set } from "firebase/database";
 import { db } from "../firebase/configuracion";
+import { imprimirTicketCompra } from "../plantilla/ticket_compra";
+import { generarTicketId } from "../funciones/generar_ticket";
 import "../css/caja.css";
+import {
+  obtenerFechaLocal,
+  formatearFechaMX,
+} from "../funciones/formato_fechas";
+
+
 
 type Producto = {
   id: string;
@@ -22,6 +30,7 @@ export default function Caja() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [mostrarModalPago, setMostrarModalPago] = useState(false);
   const [metodoPago, setMetodoPago] = useState("efectivo");
+  const [efectivoRecibido, setEfectivoRecibido] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -143,8 +152,51 @@ const total = useMemo(() => {
     );
   };
 
-  const finalizarVenta = async () => {
-    if (ticket.length === 0) return;
+const finalizarVenta = async () => {
+  if (ticket.length === 0) return;
+
+  try {
+    const fechaISO = obtenerFechaLocal();
+    const fecha = formatearFechaMX(fechaISO);
+
+    const hora = new Date().toLocaleTimeString("es-MX", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const ticketId = await generarTicketId();
+
+    const articulosTicket = ticket.map((item) => ({
+      cantidad: item.cantidadVenta,
+      articulo: item.nombre,
+      subtotal: item.precio * item.cantidadVenta,
+    }));
+
+    const total = articulosTicket.reduce(
+      (acc, item) => acc + item.subtotal,
+      0
+    );
+
+    const ticketData = {
+      id: ticketId,
+      transaccion: ticketId,
+      fecha,
+      hora,
+      metodoPago,
+      articulos: articulosTicket,
+      total,
+      creadoEn: Date.now(),
+    };
+
+    await set(ref(db, `tickets_compra/${ticketId}`), ticketData);
+
+    imprimirTicketCompra({
+      transaccion: ticketId,
+      fecha,
+      hora,
+      metodoPago,
+      articulos: articulosTicket,
+    });
 
     for (const item of ticket) {
       const nuevaCantidad = Math.max(
@@ -167,7 +219,22 @@ const total = useMemo(() => {
     setTimeout(() => {
       inputRef.current?.focus();
     }, 50);
-  };
+  } catch (error) {
+    console.error("Error finalizando venta:", error);
+  }
+};
+
+const totalPagar = total;
+const efectivoNumero = Math.max(
+  0,
+  Number(efectivoRecibido) || 0
+);
+
+const cambio = Math.max(
+  0,
+  efectivoNumero - totalPagar
+);
+
 
   return (
     <div className="caja-page">
@@ -263,48 +330,100 @@ const total = useMemo(() => {
               <strong>{formatearMoneda(total)}</strong>
             </div>
 
-            <button
-              className="btn-pagar"
-              disabled={ticket.length === 0}
-              onClick={() => setMostrarModalPago(true)}
-            >
-              Pagar
-            </button>
+        <button
+          className="btn-pagar"
+          onClick={() => {
+            setEfectivoRecibido("");
+            setMetodoPago("efectivo");
+            setMostrarModalPago(true);
+          }}
+        >
+          Pagar
+        </button>
           </div>
         </aside>
       </div>
 
-      {mostrarModalPago && (
-        <div className="modal-fondo">
-          <div className="modal-pago">
-            <div className="pago-linea">
-              <strong>Total a pagar: {formatearMoneda(total)}</strong>
+{mostrarModalPago && (
+  <div className="modal-fondo">
+    <div className="modal-pago">
 
-              <label>Método</label>
+      <div className="pago-grid">
+        <div>
+        <div className="total-pagar-box">
+          <span>Total a pagar</span>
 
-              <select
-                value={metodoPago}
-                onChange={(e) => setMetodoPago(e.target.value)}
-              >
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta_credito">Tarjeta de crédito</option>
-                <option value="tarjeta_debito">Tarjeta de débito</option>
-              </select>
-
-              <button className="btn-finalizar" onClick={finalizarVenta}>
-                Finalizar
-              </button>
-            </div>
-
-            <button
-              className="btn-cancelar"
-              onClick={() => setMostrarModalPago(false)}
-            >
-              Cancelar
-            </button>
-          </div>
+          <strong>
+            {formatearMoneda(total)}
+          </strong>
         </div>
-      )}
+        </div>
+
+        <div className="pago-metodo">
+          <label>Método</label>
+
+          <select
+            value={metodoPago}
+            onChange={(e) => {
+            setMetodoPago(e.target.value);
+            setEfectivoRecibido("");
+          }}
+          >
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta_credito">Tarjeta de crédito</option>
+            <option value="tarjeta_debito">Tarjeta de débito</option>
+          </select>
+
+          {metodoPago === "efectivo" && (
+            <div className="efectivo-box">
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Efectivo recibido"
+                value={efectivoRecibido}
+                onChange={(e) => {
+                  const valor = Math.max(0, Number(e.target.value));
+
+                  setEfectivoRecibido(
+                    e.target.value === "" ? "" : String(valor)
+                  );
+                }}
+              />
+
+              <p>Cambio: {formatearMoneda(cambio)}</p>
+            </div>
+          )}
+        </div>
+
+        <button
+          className="btn-finalizar"
+          onClick={finalizarVenta}
+          disabled={
+            metodoPago === "efectivo" &&
+            (
+              efectivoRecibido === "" ||
+              efectivoNumero < totalPagar
+            )
+          }
+        >
+          Finalizar
+        </button>
+      </div>
+
+      <button
+        className="btn-cancelar"
+        onClick={() => {
+          setEfectivoRecibido("");
+          setMostrarModalPago(false);
+        }}
+      >
+        Cancelar
+      </button>
+
+    </div>
+  </div>
+)}
     </div>
   );
 }

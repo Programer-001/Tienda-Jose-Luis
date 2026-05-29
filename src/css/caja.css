@@ -260,6 +260,63 @@
   padding: 11px 12px;
 }
 
+.pago-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 160px;
+  gap: 20px;
+  align-items: start;
+}
+
+.pago-metodo {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.efectivo-box {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.efectivo-box input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.efectivo-box p {
+  margin: 0;
+  font-weight: 800;
+  font-size: 18px;
+}
+.total-pagar-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.total-pagar-box span {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.total-pagar-box strong {
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 900;
+  color: #111827;
+}
+
+.btn-finalizar {
+  align-self: start;
+}
+
+
 .btn-cancelar {
   margin-top: 16px;
 }
