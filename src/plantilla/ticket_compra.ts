@@ -28,9 +28,9 @@ const total = data.articulos.reduce(
 );
 
 // PRECIOS YA INCLUYEN IVA
-const subtotal = total / 1.16;
+//const subtotal = total / 1.16;
 
-const iva = total - subtotal;
+//const iva = total - subtotal;
 
   const totalArticulos = data.articulos.reduce(
     (acc, item) => acc + item.cantidad,
