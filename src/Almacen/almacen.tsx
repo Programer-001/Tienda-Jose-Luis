@@ -3,7 +3,9 @@ import { get, onValue, ref, set, update } from "firebase/database";
 import JsBarcode from "jsbarcode";
 import { db } from "../firebase/configuracion";
 import { formatearMoneda, procesarInputMoneda } from "../funciones/formato_moneda";
+import { formatearPeso } from "../funciones/formato_peso";
 import "../css/Almacen.css";
+
 
 interface Proveedor {
   id: string;
@@ -22,6 +24,8 @@ interface ProductoAlmacen {
   proveedorNombre?: string;
   nombreProveedor?: string;
   activo?: boolean;
+  ventaPor?: "pieza" | "peso";
+  unidad?: "pz" | "g";
   fecha?: string;
 }
 
@@ -38,6 +42,8 @@ const productoVacio: ProductoAlmacen = {
   proveedorNombre: "",
   nombreProveedor: "",
   activo: true,
+  ventaPor: "pieza",
+  unidad: "pz",
 };
 
 export default function Almacen() {
@@ -79,6 +85,8 @@ export default function Almacen() {
           nombreProveedor: value.nombreProveedor || "",
           precioProveedor: Number(value.precioProveedor || 0),
           activo: value.activo ?? true,
+          ventaPor: value.ventaPor || "pieza",
+          unidad: value.unidad || "pz",
           fecha: value.fecha || "",
         })
       );
@@ -217,7 +225,9 @@ const handleForm = (
       proveedorNombre: form.proveedorNombre || "",
       nombreProveedor: (form.nombreProveedor || "").trim().toUpperCase(),
       precioProveedor: Number(form.precioProveedor || 0),
-      activo: true,
+      activo: form.activo ?? true,
+      ventaPor: form.ventaPor || "pieza",
+      unidad: form.ventaPor === "peso" ? "g" : "pz",
       fecha: fechaHoy(),
     };
 
@@ -358,7 +368,11 @@ const handleForm = (
                   >
                     <td>{item.id}</td>
                     <td>{item.nombre}</td>
-                    <td className="cantidad">{item.cantidad}</td>
+                    <td className="cantidad">
+                      {item.ventaPor === "peso"
+                        ? formatearPeso(item.cantidad)
+                        : item.cantidad}
+                    </td>
                     <td>{item.proveedorNombre || "-"}</td>
                     <td>
                       <span className={`indicador ${claseStock(item.cantidad)}`} />
@@ -396,7 +410,13 @@ const handleForm = (
 
             <p><strong>ID:</strong> {productoSeleccionado.id}</p>
             <p><strong>Precio:</strong> {formatearMoneda(productoSeleccionado.precio)}</p>
-            <p><strong>Cantidad:</strong> {productoSeleccionado.cantidad}</p>
+            <p><strong>Venta por:</strong>{" "}{productoSeleccionado.ventaPor === "peso" ? "Peso" : "Pieza"}</p>
+            <p>
+            <strong>Cantidad:</strong>{" "}
+            {productoSeleccionado.ventaPor === "peso"
+              ? formatearPeso(productoSeleccionado.cantidad)
+              : productoSeleccionado.cantidad}
+          </p>
             <p><strong>Proveedor:</strong> {productoSeleccionado.proveedorNombre || "-"}</p>
             <p><strong>Nombre con proveedor:</strong> {productoSeleccionado.nombreProveedor || "-"}</p>
             <p><strong>Precio proveedor:</strong>{" "}{formatearMoneda(productoSeleccionado.precioProveedor || 0)}</p>
@@ -440,14 +460,35 @@ const handleForm = (
               }}
               placeholder="$0.00"
             />
+            {/* TIPO DE VENTA */}
+            <label>Tipo de venta</label>
+            <select
+              value={form.ventaPor || "pieza"}
+              onChange={(e) => {
+                const ventaPor = e.target.value as "pieza" | "peso";
 
-            <label>Cantidad</label>
+                setForm((prev) => ({
+                  ...prev,
+                  ventaPor,
+                  unidad: ventaPor === "peso" ? "g" : "pz",
+                }));
+              }}
+            >
+              <option value="pieza">Por pieza</option>
+              <option value="peso">Por peso</option>
+            </select>
+              {/* CANTIDAD*/}
+            <label>
+              {form.ventaPor === "peso"
+                ? "Cantidad en stock en gramos"
+                : "Cantidad en stock"}
+            </label>
             <input
               type="number"
               min="0"
               value={form.cantidad}
               onChange={(e) => handleForm("cantidad", Number(e.target.value))}
-              placeholder="0"
+              placeholder={form.ventaPor === "peso" ? "Ej. 25000 = 25 KG" : "0"}
             />
 
             <label>Proveedor</label>
@@ -510,13 +551,21 @@ const handleForm = (
               ))}
             </select>
 
-            <label>Cantidad a ingresar</label>
+            <label>
+            {productos.find((p) => p.id === productoStockId)?.ventaPor === "peso"
+              ? "Cantidad a ingresar en gramos"
+              : "Cantidad a ingresar"}
+          </label>
             <input
               type="number"
               min="1"
               value={cantidadIngreso}
               onChange={(e) => setCantidadIngreso(e.target.value)}
-              placeholder="0"
+              placeholder={
+              productos.find((p) => p.id === productoStockId)?.ventaPor === "peso"
+                ? "Ej. 1300 = 1.300 KG"
+                : "0"
+            }
             />
 
             <button className="btn azul" onClick={ingresarStock}>

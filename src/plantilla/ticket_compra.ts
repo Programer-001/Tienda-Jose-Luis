@@ -161,7 +161,7 @@ const iva = total - subtotal;
         <div class="ticket">
 
           <div class="center">
-            <div class="logo">Don José Luis</div>
+            <div class="logo">Abarrotes Lulu</div>
             <div class="fecha">${data.fecha} ${data.hora}</div>
             <div class="transaccion">
               Transacción: ${data.transaccion}
@@ -191,17 +191,6 @@ const iva = total - subtotal;
                 .join("")}
             </tbody>
           </table>
-
-          <div class="resumen">
-            <div class="resumen-row">
-              <span>Subtotal</span>
-              <span>${formatoMoneda(subtotal)}</span>
-            </div>
-
-            <div class="resumen-row">
-            <span>IVA</span>
-            <span>${formatoMoneda(iva)}</span>
-            </div>
 
             <div class="resumen-row total">
               <span>Total</span>

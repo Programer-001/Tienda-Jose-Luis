@@ -5,6 +5,7 @@ import { useState } from "react";
 import Caja from "./Caja/caja";
 import Proveedores from "./Proveedores/Proveedores";
 import Almacen from "./Almacen/almacen";
+import CatalogosAlmacen from "./Almacen/CatalogosAlmacen";
 
 import Menu from "./navbar/menu";
 
@@ -42,7 +43,7 @@ function App() {
             : "☀ Claro"}
         </button>
 
-        <h1>Tienda Jose Luis</h1>
+        <h1>Abarrotes Lulu</h1>
 
         {/* PAGINAS */}
         {pagina === "caja" && <Caja />}
@@ -51,6 +52,7 @@ function App() {
           <Proveedores />
         )}
         {pagina === "almacen" && <Almacen />}
+        {pagina === "configuracion" && <CatalogosAlmacen />}
 
 
       </main>

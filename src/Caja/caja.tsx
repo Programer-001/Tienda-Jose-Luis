@@ -3,6 +3,7 @@ import { get, ref, update,set } from "firebase/database";
 import { db } from "../firebase/configuracion";
 import { imprimirTicketCompra } from "../plantilla/ticket_compra";
 import { generarTicketId } from "../funciones/generar_ticket";
+import { formatearPeso } from "../funciones/formato_peso";
 import "../css/caja.css";
 import {
   obtenerFechaLocal,
@@ -17,6 +18,8 @@ type Producto = {
   nombre: string;
   precio: number;
   cantidad: number;
+  ventaPor?: "pieza" | "peso";
+  unidad?: "pz" | "g";
   activo?: boolean;
 };
 
@@ -55,6 +58,10 @@ const lista: Producto[] = Object.entries(data).map(
 
     cantidad: Number(value.cantidad || 0),
 
+    ventaPor: value.ventaPor || "pieza",
+    
+    unidad: value.unidad || "pz",
+
     activo: value.activo ?? true,
   })
 );
@@ -73,37 +80,84 @@ const lista: Producto[] = Object.entries(data).map(
     });
 
 const total = useMemo(() => {
-  return ticket.reduce(
-    (sum, item) => sum + item.precio * item.cantidadVenta,
-    0
-  );
+  return ticket.reduce((sum, item) => {
+    const subtotal =
+      item.ventaPor === "peso"
+        ? (item.precio * item.cantidadVenta) / 1000
+        : item.precio * item.cantidadVenta;
+
+    return sum + subtotal;
+  }, 0);
 }, [ticket]);
 
-  const agregarProducto = (producto: Producto) => {
-    if (producto.cantidad <= 0) {
-      alert("Este producto no tiene stock.");
+const agregarProducto = (producto: Producto) => {
+  if (producto.cantidad <= 0) {
+    alert("Sin stock");
+    return;
+  }
+
+  let cantidadVenta = 1;
+
+  // =========================
+  // PRODUCTOS POR PESO
+  // =========================
+  if (producto.ventaPor === "peso") {
+    const gramos = prompt(
+      `Ingrese gramos para ${producto.nombre}`
+    );
+
+    if (!gramos) return;
+
+    cantidadVenta = Number(gramos);
+
+    if (isNaN(cantidadVenta) || cantidadVenta <= 0) {
+      alert("Cantidad inválida");
       return;
     }
 
-    setTicket((prev) => {
-      const existe = prev.find((item) => item.id === producto.id);
+    if (cantidadVenta > producto.cantidad) {
+      alert("Stock insuficiente");
+      return;
+    }
+  }
 
-      if (existe) {
-        if (existe.cantidadVenta >= producto.cantidad) {
-          alert("No hay más stock disponible.");
-          return prev;
-        }
+  setTicket((prev) => {
+    const existe = prev.find((p) => p.id === producto.id);
 
-        return prev.map((item) =>
-          item.id === producto.id
-            ? { ...item, cantidadVenta: item.cantidadVenta + 1 }
-            : item
-        );
+    // =========================
+    // SI YA EXISTE
+    // =========================
+    if (existe) {
+      const nuevaCantidad =
+        existe.cantidadVenta + cantidadVenta;
+
+      if (nuevaCantidad > producto.cantidad) {
+        alert("Stock insuficiente");
+        return prev;
       }
 
-      return [...prev, { ...producto, cantidadVenta: 1 }];
-    });
-  };
+      return prev.map((p) =>
+        p.id === producto.id
+          ? {
+              ...p,
+              cantidadVenta: nuevaCantidad,
+            }
+          : p
+      );
+    }
+
+    // =========================
+    // NUEVO
+    // =========================
+    return [
+      ...prev,
+      {
+        ...producto,
+        cantidadVenta,
+      },
+    ];
+  });
+};
 
   const buscarPorCodigo = () => {
     const codigoLimpio = codigo.trim();
@@ -167,9 +221,20 @@ const finalizarVenta = async () => {
     const ticketId = await generarTicketId();
 
     const articulosTicket = ticket.map((item) => ({
-      cantidad: item.cantidadVenta,
-      articulo: item.nombre,
-      subtotal: item.precio * item.cantidadVenta,
+      cantidad:
+        item.ventaPor === "peso"
+          ? 1
+          : item.cantidadVenta,
+
+      articulo:
+        item.ventaPor === "peso"
+          ? `${item.nombre} ${formatearPeso(item.cantidadVenta)}`
+          : item.nombre,
+
+      subtotal:
+        item.ventaPor === "peso"
+          ? (item.precio * item.cantidadVenta) / 1000
+          : item.precio * item.cantidadVenta,
     }));
 
     const total = articulosTicket.reduce(
@@ -273,8 +338,17 @@ const cambio = Math.max(
               >
                 <strong>{producto.nombre}</strong>
                 <span>{producto.codigoBarras}</span>
-                <b>{formatearMoneda(producto.precio)}</b>
-                <small>Stock: {producto.cantidad}</small>
+                <b>
+                  {formatearMoneda(producto.precio)}
+                  {producto.ventaPor === "peso" ? " / KG" : ""}
+                </b>
+                <small>
+                Stock: {
+                  producto.ventaPor === "peso"
+                    ? formatearPeso(producto.cantidad)
+                    : producto.cantidad
+                }
+              </small>
               </button>
             ))}
           </div>
@@ -301,22 +375,44 @@ const cambio = Math.max(
                 <div className="ticket-item" key={item.id}>
                   <div className="ticket-info">
                     <strong>{item.nombre}</strong>
-                    <small>Cantidad: {item.cantidadVenta}</small>
+                    <small>
+                      {item.ventaPor === "peso"
+                        ? `Peso: ${formatearPeso(item.cantidadVenta)}`
+                        : `Cantidad: ${item.cantidadVenta}`}
+                    </small>
                   </div>
 
                   <div className="ticket-actions">
                     <span>
-                      {formatearMoneda(item.precio * item.cantidadVenta)}
+                      {formatearMoneda(
+                        item.ventaPor === "peso"
+                          ? (item.precio * item.cantidadVenta) / 1000
+                          : item.precio * item.cantidadVenta
+                      )}
                     </span>
 
                     <div className="cantidad-btns">
-                      <button onClick={() => cambiarCantidad(item.id, -1)}>
-                        -
-                      </button>
+                    <button
+                      onClick={() =>
+                        cambiarCantidad(
+                          item.id,
+                          item.ventaPor === "peso" ? -100 : -1
+                        )
+                      }
+                    >
+                      -
+                    </button>
 
-                      <button onClick={() => cambiarCantidad(item.id, 1)}>
-                        +
-                      </button>
+                    <button
+                      onClick={() =>
+                        cambiarCantidad(
+                          item.id,
+                          item.ventaPor === "peso" ? 100 : 1
+                        )
+                      }
+                    >
+                      +
+                    </button>
                     </div>
                   </div>
                 </div>
