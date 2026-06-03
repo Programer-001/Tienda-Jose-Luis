@@ -26,13 +26,13 @@ function Menu({
       <div className="sidebar-logo">
 
         <div className="logo-circle">
-          JL
+          AL
         </div>
 
         <h1>
-          TIENDA
+          ABARROTES
           <br />
-          JOSE LUIS
+          LULU
         </h1>
 
       </div>

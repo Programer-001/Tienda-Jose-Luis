@@ -309,7 +309,7 @@
   font-size: 42px;
   line-height: 1;
   font-weight: 900;
-  color: #111827;
+   color: var(--total-color);
 }
 
 .btn-finalizar {

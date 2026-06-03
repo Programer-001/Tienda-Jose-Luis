@@ -1,0 +1,307 @@
+/* =========================
+   PAGINA GENERAL
+========================= */
+
+.ventas-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ventas-header h2 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.ventas-header p {
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.ventas-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ventas-tab {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.2s;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.ventas-tab:hover {
+  transform: translateY(-2px);
+}
+
+.ventas-tab.activo {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.ventas-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* =========================
+   CORTE DIARIO
+========================= */
+
+.corte-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.corte-resumen h3 {
+  margin-top: 0;
+}
+
+.corte-resumen p {
+  margin: 10px 0;
+}
+
+.corte-resumen hr {
+  margin: 16px 0;
+}
+
+/* =========================
+   FILTROS
+========================= */
+
+.corte-filtros {
+  display: flex;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.corte-filtros label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.corte-filtros input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.corte-filtros button {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #3b82f6;
+  color: white;
+  transition: 0.2s;
+}
+
+.corte-filtros button:hover {
+  background: #2563eb;
+}
+
+/* =========================
+   TABLA
+========================= */
+
+.corte-table-scroll {
+  overflow: auto;
+}
+
+.corte-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.corte-table th {
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+}
+
+.corte-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.corte-table tr:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+/* =========================
+   ACCIONES TICKET
+========================= */
+
+.ventas-acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.ventas-acciones button {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.2s;
+  color: white;
+}
+
+/* Guardar */
+.ventas-acciones button:nth-child(1) {
+  background: #16a34a;
+}
+
+.ventas-acciones button:nth-child(1):hover {
+  background: #15803d;
+}
+
+/* Cancelar */
+.ventas-acciones button:nth-child(2) {
+  background: #ea580c;
+}
+
+.ventas-acciones button:nth-child(2):hover {
+  background: #c2410c;
+}
+
+/* Borrar */
+.ventas-acciones button:nth-child(3) {
+  background: #dc2626;
+}
+
+.ventas-acciones button:nth-child(3):hover {
+  background: #b91c1c;
+}
+
+/* =========================
+   BOTON BORRAR ARTICULO
+========================= */
+
+.btn-borrar-articulo {
+  border: none;
+  background: #dc2626;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: 0.2s;
+}
+
+.btn-borrar-articulo:hover {
+  background: #b91c1c;
+}
+
+
+/* =========================
+   REPORTES             
+========================= */
+.reportes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.reporte-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.reporte-card p {
+  margin: 0 0 8px;
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+.reporte-card h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+@media (max-width: 900px) {
+  .reportes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .corte-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .ventas-header h2 {
+    font-size: 26px;
+  }
+
+  .ventas-tabs {
+    flex-direction: column;
+  }
+
+  .ventas-tab {
+    width: 100%;
+  }
+
+  .ventas-card {
+    padding: 14px;
+  }
+
+  .corte-filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .corte-filtros input,
+  .corte-filtros button {
+    width: 100%;
+  }
+
+  .corte-table {
+    min-width: 700px;
+  }
+
+  .ventas-acciones {
+    flex-direction: column;
+  }
+
+  .ventas-acciones button {
+    width: 100%;
+  }
+}
