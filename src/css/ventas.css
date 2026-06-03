@@ -177,33 +177,42 @@
   color: white;
 }
 
-/* Guardar */
-.ventas-acciones button:nth-child(1) {
+
+/* =========================
+   BOTONES de ticket
+========================= */
+
+.btn-guardar {
   background: #16a34a;
 }
 
-.ventas-acciones button:nth-child(1):hover {
+.btn-guardar:hover {
   background: #15803d;
 }
 
-/* Cancelar */
-.ventas-acciones button:nth-child(2) {
+.btn-imprimir {
+  background: #2563eb;
+}
+
+.btn-imprimir:hover {
+  background: #1d4ed8;
+}
+
+.btn-cancelar-ticket {
   background: #ea580c;
 }
 
-.ventas-acciones button:nth-child(2):hover {
+.btn-cancelar-ticket:hover {
   background: #c2410c;
 }
 
-/* Borrar */
-.ventas-acciones button:nth-child(3) {
+.btn-borrar-ticket {
   background: #dc2626;
 }
 
-.ventas-acciones button:nth-child(3):hover {
+.btn-borrar-ticket:hover {
   background: #b91c1c;
 }
-
 /* =========================
    BOTON BORRAR ARTICULO
 ========================= */

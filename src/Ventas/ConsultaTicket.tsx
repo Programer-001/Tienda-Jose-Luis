@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ref, get, update, remove } from "firebase/database";
 import { db } from "../firebase/configuracion";
 import { formatearMoneda } from "../funciones/formato_moneda";
+import { imprimirTicketCompra } from "../plantilla/ticket_compra";
 
 interface ArticuloTicket {
   articulo: string;
@@ -125,6 +126,18 @@ function ConsultaTicket() {
     return metodo;
   };
 
+  const imprimirTicket = () => {
+  if (!ticket) return;
+
+  imprimirTicketCompra({
+    transaccion: ticket.transaccion,
+    fecha: ticket.fecha,
+    hora: ticket.hora,
+    metodoPago: ticket.metodoPago,
+    articulos: ticket.articulos,
+  });
+};
+
   return (
     <div className="ventas-card">
       <h3>Consulta de Ticket</h3>
@@ -201,9 +214,21 @@ function ConsultaTicket() {
           <h3>Total: {formatearMoneda(ticket.total)}</h3>
 
           <div className="ventas-acciones">
-            <button onClick={guardarCambios}>Guardar cambios</button>
-            <button onClick={cancelarTicket}>Cancelar ticket</button>
-            <button onClick={borrarTicket}>Borrar ticket</button>
+            <button className="btn-guardar" onClick={guardarCambios}>
+            Guardar cambios
+            </button>
+
+            <button className="btn-imprimir" onClick={imprimirTicket}>
+            Imprimir ticket
+            </button>
+
+            <button className="btn-cancelar-ticket" onClick={cancelarTicket}>
+            Cancelar ticket
+            </button>
+
+            <button className="btn-borrar-ticket" onClick={borrarTicket}>
+            Borrar ticket
+            </button>
           </div>
         </div>
       )}
